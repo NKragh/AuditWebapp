@@ -1,0 +1,33 @@
+hr {
+  background-color: black;
+}
+
+.navitem {
+  display: inline;
+  padding: 0 5px;
+  border: 1px solid black;
+}
+
+.infobox {
+  border: 1px solid black;
+}
+
+.infoitem {
+  margin: 2px;
+}
+
+.mainbuttons {
+  margin: 2px;
+  color: white;
+  font-weight: bold;
+}
+
+.radiobuttonholder {
+  text-align: center;
+  align-items: baseline;
+}
+
+.subquestionholder {
+  border: 1px dotted black;
+  margin: 0 20px;
+}

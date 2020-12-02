@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Audit</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/a29e7d9b96.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body style="margin: 0 10%;">
+  <div class="row" id="stamdata">
+    <div class="col-5 infobox">
+      <div>Deltagere</div>
+      <div class="row">
+        <div class="col-3">
+          <div>Auditor:</div>
+          <div>Deltagere:</div>
+          <div></div>
+        </div>
+        <div class="col">
+          <div id="CVR" class="infobox infoitem">12345678</div>
+          <div id="Deltager1" class="infobox infoitem">Elektriker ApS</div>
+          <div id="Deltager2" class="infobox infoitem">02/12-2020</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-5 infobox">
+      <div>Intern Audit</div>
+      <div class="row">
+        <div class="col-3">
+          <div>CVR:</div>
+          <div>Navn:</div>
+          <div>Dato:</div>
+        </div>
+        <div class="col">
+          <div id="CVR" class="infobox infoitem">12345678</div>
+          <div id="Navn" class="infobox infoitem">Elektriker ApS</div>
+          <div id="Dato" class="infobox infoitem">02/12-2020</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-2" style="display: flex; flex-direction: column;">
+      <button class="mainbuttons" style="background-color: green">Afslut</button>
+      <button class="mainbuttons" style="background-color: darkgreen;">Gem</button>
+      <button class="mainbuttons" style="background-color: rgb(255, 40, 40)">Annuller</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-10">
+      <div class="row">
+        <div class="col">
+          <h1>Checkliste
+            <hr>
+          </h1>
+        </div>
+      </div>
+      <div class="row" style="display:block; border: 1px solid black;">
+        <div class="col">
+          <div class="row">
+            <h2>
+              Kvalitetsledelsessystemet (QuestionGroup)
+              <i class="fa fa-info-circle" style="font-size: 24px; color: blue;"></i>
+            </h2>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <p style="font-size: 20px;">1) Er aktioner fra tidligere...? (Question)
+                  <i class="fa fa-info-circle" style="font-size: 14px; color: blue;"></i></p>
+              </div>
+              <div class="row" style="border: 1px dotted black; margin: 0 20px;">
+                <div class="col">
+                  <div>Er der dokumentation..? (Subquestion)</div>
+                </div>
+                <div class="col">
+                  <div class="row radiobuttonholder" style="font-size: 11px;">
+                    <div class="col">
+                      <label for="satisfaction1">Meget tilfreds</label>
+                      <input type="radio" id="satisfaction1" name="satisfaction" value="Meget tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction2">Tilfreds</label>
+                      <input type="radio" id="satisfaction2" name="satisfaction" value="Tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction3">Hverken eller</label>
+                      <input type="radio" id="satisfaction3" name="satisfaction" value="Hverken eller">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction4">Utilfreds</label>
+                      <input type="radio" id="satisfaction4" name="satisfaction" value="Utilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction5">Meget utilfreds</label>
+                      <input type="radio" id="satisfaction5" name="satisfaction" value="Meget utilfreds"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="border: 1px dotted black; margin: 0 20px;">
+                <div class="col">
+                  <div>Er der dokumentation..? (Subquestion)</div>
+                </div>
+                <div class="col">
+                  <div class="row radiobuttonholder" style="font-size: 11px;">
+                    <div class="col">
+                      <label for="satisfaction1">Meget tilfreds</label>
+                      <input type="radio" id="satisfaction1" name="satisfaction" value="Meget tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction2">Tilfreds</label>
+                      <input type="radio" id="satisfaction2" name="satisfaction" value="Tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction3">Hverken eller</label>
+                      <input type="radio" id="satisfaction3" name="satisfaction" value="Hverken eller">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction4">Utilfreds</label>
+                      <input type="radio" id="satisfaction4" name="satisfaction" value="Utilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction5">Meget utilfreds</label>
+                      <input type="radio" id="satisfaction5" name="satisfaction" value="Meget utilfreds"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="border: 1px dotted black; margin: 0 20px;">
+                <div class="col">
+                  <div>Er aktioner behandlet tilfredsstillende..? (Subquestion)</div>
+                </div>
+                <div class="col">
+                  <div class="row radiobuttonholder" style="font-size: 11px;">
+                    <div class="col">
+                      <label for="satisfaction1">Meget tilfreds</label>
+                      <input type="radio" id="satisfaction1" name="satisfaction" value="Meget tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction2">Tilfreds</label>
+                      <input type="radio" id="satisfaction2" name="satisfaction" value="Tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction3">Hverken eller</label>
+                      <input type="radio" id="satisfaction3" name="satisfaction" value="Hverken eller">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction4">Utilfreds</label>
+                      <input type="radio" id="satisfaction4" name="satisfaction" value="Utilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction5">Meget utilfreds</label>
+                      <input type="radio" id="satisfaction5" name="satisfaction" value="Meget utilfreds"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <h2>
+              Ledelse og system (QuestionGroup)
+              <i class="fa fa-info-circle" style="font-size: 24px; color: blue;"></i>
+            </h2>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="row">
+                <p style="font-size: 20px;">1) Er aktioner fra tidligere...? (Question)
+                  <i class="fa fa-info-circle" style="color: blue; font-size: 14px;"></i></p>
+              </div>
+              <div class="row" style="border: 1px dotted black; margin: 0 20px;">
+                <div class="col">
+                  <div>Er der dokumentation..? (Subquestion)</div>
+                </div>
+                <div class="col">
+                  <div class="row radiobuttonholder" style="font-size: 11px;">
+                    <div class="col">
+                      <label for="satisfaction1">Meget tilfreds</label>
+                      <input type="radio" id="satisfaction1" name="satisfaction" value="Meget tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction2">Tilfreds</label>
+                      <input type="radio" id="satisfaction2" name="satisfaction" value="Tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction3">Hverken eller</label>
+                      <input type="radio" id="satisfaction3" name="satisfaction" value="Hverken eller">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction4">Utilfreds</label>
+                      <input type="radio" id="satisfaction4" name="satisfaction" value="Utilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction5">Meget utilfreds</label>
+                      <input type="radio" id="satisfaction5" name="satisfaction" value="Meget utilfreds"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="border: 1px dotted black; margin: 0 20px;">
+                <div class="col">
+                  <div>Er der dokumentation..? (Subquestion)</div>
+                </div>
+                <div class="col">
+                  <div class="row radiobuttonholder" style="font-size: 11px;">
+                    <div class="col">
+                      <label for="satisfaction1">Meget tilfreds</label>
+                      <input type="radio" id="satisfaction1" name="satisfaction" value="Meget tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction2">Tilfreds</label>
+                      <input type="radio" id="satisfaction2" name="satisfaction" value="Tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction3">Hverken eller</label>
+                      <input type="radio" id="satisfaction3" name="satisfaction" value="Hverken eller">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction4">Utilfreds</label>
+                      <input type="radio" id="satisfaction4" name="satisfaction" value="Utilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction5">Meget utilfreds</label>
+                      <input type="radio" id="satisfaction5" name="satisfaction" value="Meget utilfreds"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="border: 1px dotted black; margin: 0 20px;">
+                <div class="col">
+                  <div>Er aktioner behandlet tilfredsstillende..? (Subquestion)</div>
+                </div>
+                <div class="col">
+                  <div class="row radiobuttonholder" style="font-size: 11px;">
+                    <div class="col">
+                      <label for="satisfaction1">Meget tilfreds</label>
+                      <input type="radio" id="satisfaction1" name="satisfaction" value="Meget tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction2">Tilfreds</label>
+                      <input type="radio" id="satisfaction2" name="satisfaction" value="Tilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction3">Hverken eller</label>
+                      <input type="radio" id="satisfaction3" name="satisfaction" value="Hverken eller">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction4">Utilfreds</label>
+                      <input type="radio" id="satisfaction4" name="satisfaction" value="Utilfreds">
+                    </div>
+                    <div class="col">
+                      <label for="satisfaction5">Meget utilfreds</label>
+                      <input type="radio" id="satisfaction5" name="satisfaction" value="Meget utilfreds"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-2">
+      <div class="row">
+        <div class="col">
+          <h1>
+            Resultat
+            <hr>
+          </h1>
+        </div>
+      </div>
+      <div class="row" style="border: 1px solid black;">
+        5 knapper
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
