@@ -2,32 +2,50 @@ const url = "https://auditrest.azurewebsites.net/api/checklists"
 
 window.onload = GetChecklists()
 
-var ele = document.getElementById('container')
+var container = document.getElementById('container')
+var checklistcontainer;
 
 var result;
 
 function GetChecklists() {
+  var html = ""
   fetch(url)
     .then(response => response.json())
     .then(data => {
       console.log(data)
       result = data;
+      html += `<div class="row">
+               <div class="col-10">
+               <div class="row">`
       for (x in data) {
-        ele.innerHTML += `<div class="row"><div class="col-10"><h2>${data[x].name}</h2></div><div class="col-2" style="text-align: center; font-size: 1.5em; font-weight: 600;">Bemærkninger</div></div><hr>`
-        ele.innerHTML += GetQuestionGroups(x)
+        html += `<div class="col-4 checklistheader" onclick="ChecklistClicked(this)" id="${x}" name="checklist">${data[x].name}</div>`
       }
-
+      html += `</div>
+               </div>
+               <div class="col-2" style="text-align: center; font-size: 1.5em; font-weight: 600;">Bemærkninger</div>
+               </div>
+               <hr>
+               <div id="checklistcontainer"></div>`
+      container.innerHTML += html
+      checklistcontainer = document.getElementById('checklistcontainer')
     })
+}
+
+function ChecklistClicked(checklist) {
+  var id = checklist.id
+
+  html = GetQuestionGroups(id)
+  checklistcontainer.innerHTML = html
 }
 
 function GetQuestionGroups(id) {
   var html = "";
   questionGroups = result[id].questionGroups
-  for (x in questionGroups) {
+  for (let i = 0; i < questionGroups.length; i++) {
     html += `
             <div class="row">
               <div class="col">
-                <div class="row"><h3>${result[id].questionGroups[x].name}</h3></div>
+                <div class="row"><h3>${result[id].questionGroups[i].name}</h3></div>
                 <div class="row">${GetQuestions(id, x)}</div>
               </div>
             </div>`
@@ -54,7 +72,6 @@ function GetQuestions(clid, qgid) {
               <input type="file" name="file${q.questionId}" id="file${q.questionId}">
             </div>`
   }
-  //${GetBemærkning()}
   return html;
 }
 
