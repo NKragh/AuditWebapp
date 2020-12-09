@@ -46,7 +46,7 @@ function GetQuestionGroups(id) {
             <div class="row">
               <div class="col">
                 <div class="row"><h3>${result[id].questionGroups[i].name}</h3></div>
-                <div class="row">${GetQuestions(id, x)}</div>
+                <div class="row">${GetQuestions(id, i)}</div>
               </div>
             </div>`
   }
@@ -124,6 +124,10 @@ function LoadAnswerMain(questionId) {
               <div class="col">
                 <label for="main${questionId+4}">Forbedring</label><br>
                 <input type="radio" id="main${questionId+4}" name="main${questionId}" value="Forbedring">
+              </div>
+              <div class="col">
+                <label for="main${questionId+5}">Ikke relevant</label><br>
+                <input type="radio" id="main${questionId+5}" name="main${questionId}" value="Ikke relevant">
               </div>
             </div>
           </div>
