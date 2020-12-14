@@ -20,8 +20,8 @@
 
 </head>
 
-<body style="margin: 0 10%;">
-  <div id="container" class="container">
+<body>
+  <div class="container">
     <div class="row" id="stamdata">
       <div class="col-5 infobox">
         <div>Deltagere</div>
@@ -54,15 +54,18 @@
         </div>
       </div>
       <div class="col-2" style="display: flex; flex-direction: column;">
-        <button class="mainbuttons"
+        <button class="mainbuttons" id="endbtn"
           style="background-color: green">Afslut</button>
-        <button class="mainbuttons"
+        <button class="mainbuttons" id="savebtn"
           style="background-color: darkgreen;">Gem</button>
-        <button class="mainbuttons"
+        <button class="mainbuttons" id="cancelbtn"
           style="background-color: rgb(255, 40, 40)">Annuller</button>
+        <button class="mainbuttons" id="testbtn"
+          style="background-color: rgb(185, 176, 43)">Test</button>
       </div>
     </div>
   </div>
+  <div id="container" class="container"></div>
   <script src="audit.js"></script>
 </body>
 
