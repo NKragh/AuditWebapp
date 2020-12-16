@@ -43,3 +43,8 @@ hr {
   cursor: pointer;
   text-decoration: underline;
 }
+
+.remarkfield {
+  border: 1px solid darkgreen;
+  width: 100%;
+}

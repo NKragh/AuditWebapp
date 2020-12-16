@@ -1,4 +1,7 @@
-const checklisturl = "https://auditrest.azurewebsites.net/api/checklists"
+const checklisturl = {
+  prod: "https://auditrest.azurewebsites.net/api/checklists",
+  dev: "http://localhost:51284/api/checklists"
+}
 const reportsurl = {
   prod: "https://auditrest.azurewebsites.net/api/reports",
   dev: "http://localhost:51284/api/reports"
@@ -16,12 +19,13 @@ var result;
 
 function start() {
   GetChecklists()
-  document.getElementById('testbtn').addEventListener('click', TestPost)
+  document.getElementById('savebtn').addEventListener('click', TestPost)
+
 }
 
 function GetChecklists() {
   var html = ""
-  fetch(checklisturl)
+  fetch(checklisturl['prod'])
     .then(response => response.json())
     .then(data => {
       console.log(data)
@@ -39,6 +43,7 @@ function GetChecklists() {
                <hr>
                <div id="checklistcontainer"></div>`
       container.innerHTML += html
+      document.querySelector('div.checklistheader').click()
     })
 }
 
@@ -64,39 +69,61 @@ function GetQuestionGroups(id) {
   return html;
 }
 
+var allQuestions = []
+
 function GetQuestions(clid, qgid) {
   var html = "";
   questions = result[clid].questionGroups[qgid].questions
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i];
+    allQuestions.push(q)
     html += `<div class="col-10">
               <div class="row">
-                <div class="col-lg" style="font-size: 1.2rem;">${i+1}) ${q.text}</div>
-                <div class="col-lg" style="font-size: 1rem;">${LoadAnswerType(q.answerType.answerOption, q.questionId)}</div>
+                <div class="col-lg">${i+1}) ${q.text} <button onclick="ToggleSubQuestions(${q.questionId})">i</button></div>
+                <div class="col">${LoadAnswerType(q.answerType.answerOption, q.questionId)}</div>
               </div>
-              <div class="row">
-                ${GetSubQuestions(q)}
-              </div>
+              <div class="row" id="subquestions${q.questionId}"></div>
             </div>
             <div class="col-2">
-              <p contenteditable="true" id="remark${q.questionId}" style="border: 1px solid darkgreen;">Supplerende bemærkning...</p>
+              <textarea id="remark${q.questionId}" class="remarkfield" placeholder="Supplerende bemærkning..."></textarea>
               <input type="file" name="file${q.questionId}" id="file${q.questionId}">
-            </div>`
+            </div>`;
   }
   return html;
 }
 
-function GetSubQuestions(question, id) {
+function ToggleSubQuestions(questionId) {
+  html = document.getElementById("subquestions" + questionId).innerHTML
+  if (html == "") {
+    html = GetSubQuestions(questionId)
+  } else {
+    html = ""
+  }
+  document.getElementById("subquestions" + questionId).innerHTML = html
+}
+
+function GetSubQuestions(id) {
   var html = ""
-  subquestions = question.subQuestions
+
+  allQuestions.forEach(question => {
+    console.log(question)
+    if (question.questionId == id) {
+      subquestions = question.subQuestions
+    }
+  });
+
   for (let i = 0; i < subquestions.length; i++) {
     const q = subquestions[i];
     html += `
-            <div class="col-12">
+            <div class="col-10">
               <div class="row" style="border: 1px solid black; min-height: 70px; align-items: center;">
-              <div class="col-lg" style="font-size: 1rem;">${q.text}</div>
-              <div class="col-lg" style="font-size: 0.8rem;">${LoadAnswerType(q.answerType.answerOption, q.questionId)}</div>
+                <div class="col-lg" style="font-size: 1rem;">${q.text}</div>
+                <div class="col-lg" style="font-size: 0.8rem;">${LoadAnswerType(q.answerType.answerOption, q.questionId)}</div>
               </div>
+            </div>
+            <div class="col-2">
+              <textarea id="remark${q.questionId}" class="remarkfield" placeholder="Supplerende bemærkning..."></textarea>
+              <input type="file" name="file${q.questionId}" id="file${q.questionId}">
             </div>
             `
   }
@@ -114,7 +141,6 @@ function LoadAnswerType(answerType, questionId) {
 
 function LoadAnswerMain(questionId) {
   return `
-          <div class="col">
             <div class="row radiobuttonholder">
               <div class="col">
                 <label for="main${questionId}_1">OK</label><br>
@@ -137,15 +163,37 @@ function LoadAnswerMain(questionId) {
                 <input type="radio" id="main${questionId}_5" name="main${questionId}" value="Ikke relevant">
               </div>
             </div>
-          </div>
           `
+}
 
+
+function Answers() {
+  var answers = []
+  for (let i = 0; i < allQuestions.length; i++) {
+    const q = allQuestions[i];
+    ele = document.querySelector(`input[name="main${q.questionId}"]:checked`)
+    comment = document.querySelector(`textarea#remark${q.questionId}`)
+    console.log(comment)
+    if (ele != null && ele.value != "OK") {
+      answer = {
+        "answer": ele.value,
+        "auditorId": 9,
+        "comment": comment.value,
+        "cvr": 12345678,
+        "questionId": q.questionId,
+        "remark": "Remark",
+        "reportId": 1
+      }
+      answers.push(answer)
+    }
+  }
+  return answers
 }
 
 TestGet()
 
 function TestGet() {
-  fetch(reportsurl['dev'])
+  fetch(reportsurl['prod'])
     .then(response => response.json())
     .then(data => {
       console.log(data[0].questionAnswers)
@@ -164,12 +212,8 @@ function TestGet() {
   }
 */
 
-function TestPost() {
-  console.log('POST:')
-
-  fetch(answersurl['dev'], {
-      method: 'POST',
-      body: `{
+/*
+`{
         "answer": "OK",
         "remark": "Remark",
         "comment": "Comment",
@@ -177,7 +221,14 @@ function TestPost() {
         "questionId": 20,
         "auditorId": 9,
         "reportId": 1
-      }`,
+      }`
+*/
+
+function TestPost() {
+  console.log('POST:')
+  fetch(answersurl['prod'], {
+      method: 'POST',
+      body: JSON.stringify(Answers()),
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -186,4 +237,43 @@ function TestPost() {
     .then(response => {
       console.log(response)
     })
+}
+
+function GenerateReport() {
+  //Load the docx file as a binary
+  var content = fs.readFileSync(path.resolve(__dirname, 'input.docx'), 'binary');
+
+  var zip = new PizZip(content);
+  var doc;
+  try {
+    doc = new Docxtemplater(zip);
+  } catch (error) {
+    // Catch compilation errors (errors caused by the compilation of the template : misplaced tags)
+    errorHandler(error);
+  }
+
+  //set the templateVariables
+  doc.setData({
+    first_name: 'John',
+    last_name: 'Doe',
+    phone: '0652455478',
+    description: 'New Website'
+  });
+
+  try {
+    // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+    doc.render()
+  } catch (error) {
+    // Catch rendering errors (errors relating to the rendering of the template : angularParser throws an error)
+    errorHandler(error);
+  }
+
+  var buf = doc.getZip()
+    .generate({
+      type: 'nodebuffer'
+    });
+
+  // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
+  fs.writeFileSync(path.resolve(__dirname, 'output.docx'), buf);
+
 }
