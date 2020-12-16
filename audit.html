@@ -9,7 +9,6 @@
     content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="style.css">
 
-
   <!-- Bootstrap CSS -->
   <link rel="stylesheet"
     href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -17,6 +16,17 @@
     crossorigin="anonymous">
   <script src="https://kit.fontawesome.com/a29e7d9b96.js"
     crossorigin="anonymous"></script>
+
+  <!-- Report scripts -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.19.7/docxtemplater.js">
+  </script>
+  <script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js">
+  </script>
+  <script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip-utils.js"></script>
+
 
 </head>
 
@@ -60,7 +70,7 @@
           style="background-color: darkgreen;">Gem</button>
         <button class="mainbuttons" id="cancelbtn"
           style="background-color: rgb(255, 40, 40)">Annuller</button>
-        <button class="mainbuttons" id="testbtn"
+        <button class="mainbuttons" id="testbtn" onclick="generate()"
           style="background-color: rgb(185, 176, 43)">Test</button>
       </div>
     </div>

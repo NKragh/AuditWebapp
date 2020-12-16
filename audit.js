@@ -19,7 +19,7 @@ var result;
 
 function start() {
   GetChecklists()
-  document.getElementById('savebtn').addEventListener('click', TestPost)
+  document.getElementById('savebtn').addEventListener('click', Post)
 
 }
 
@@ -106,7 +106,6 @@ function GetSubQuestions(id) {
   var html = ""
 
   allQuestions.forEach(question => {
-    console.log(question)
     if (question.questionId == id) {
       subquestions = question.subQuestions
     }
@@ -173,7 +172,6 @@ function Answers() {
     const q = allQuestions[i];
     ele = document.querySelector(`input[name="main${q.questionId}"]:checked`)
     comment = document.querySelector(`textarea#remark${q.questionId}`)
-    console.log(comment)
     if (ele != null && ele.value != "OK") {
       answer = {
         "answer": ele.value,
@@ -190,9 +188,7 @@ function Answers() {
   return answers
 }
 
-TestGet()
-
-function TestGet() {
+function GetAnswers() {
   fetch(reportsurl['prod'])
     .then(response => response.json())
     .then(data => {
@@ -224,7 +220,7 @@ function TestGet() {
       }`
 */
 
-function TestPost() {
+function Post() {
   console.log('POST:')
   fetch(answersurl['prod'], {
       method: 'POST',
@@ -239,41 +235,101 @@ function TestPost() {
     })
 }
 
-function GenerateReport() {
-  //Load the docx file as a binary
-  var content = fs.readFileSync(path.resolve(__dirname, 'input.docx'), 'binary');
 
-  var zip = new PizZip(content);
-  var doc;
-  try {
-    doc = new Docxtemplater(zip);
-  } catch (error) {
-    // Catch compilation errors (errors caused by the compilation of the template : misplaced tags)
-    errorHandler(error);
-  }
 
-  //set the templateVariables
-  doc.setData({
-    first_name: 'John',
-    last_name: 'Doe',
-    phone: '0652455478',
-    description: 'New Website'
-  });
-
-  try {
-    // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-    doc.render()
-  } catch (error) {
-    // Catch rendering errors (errors relating to the rendering of the template : angularParser throws an error)
-    errorHandler(error);
-  }
-
-  var buf = doc.getZip()
-    .generate({
-      type: 'nodebuffer'
-    });
-
-  // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-  fs.writeFileSync(path.resolve(__dirname, 'output.docx'), buf);
-
+function loadFile(url, callback) {
+  PizZipUtils.getBinaryContent(url, callback);
 }
+
+function generate() {
+  loadFile("input.docx", function (error, content) {
+    if (error) {
+      throw error
+    };
+
+    // The error object contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
+    function replaceErrors(key, value) {
+      if (value instanceof Error) {
+        return Object.getOwnPropertyNames(value).reduce(function (error, key) {
+          error[key] = value[key];
+          return error;
+        }, {});
+      }
+      return value;
+    }
+
+    function errorHandler(error) {
+      console.log(JSON.stringify({
+        error: error
+      }, replaceErrors));
+
+      if (error.properties && error.properties.errors instanceof Array) {
+        const errorMessages = error.properties.errors.map(function (error) {
+          return error.properties.explanation;
+        }).join("\n");
+        console.log('errorMessages', errorMessages);
+        // errorMessages is a humanly readable message looking like this :
+        // 'The tag beginning with "foobar" is unopened'
+      }
+      throw error;
+    }
+
+    var zip = new PizZip(content);
+    var doc;
+    try {
+      doc = new window.docxtemplater(zip);
+    } catch (error) {
+      // Catch compilation errors (errors caused by the compilation of the template : misplaced tags)
+      errorHandler(error);
+    }
+
+    doc.setData({
+      first_name: 'John',
+      last_name: 'Doe',
+      phone: '0652455478',
+      description: 'New Website',
+      answers: Answers()
+    });
+    try {
+      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+      doc.render();
+    } catch (error) {
+      // Catch rendering errors (errors relating to the rendering of the template : angularParser throws an error)
+      errorHandler(error);
+    }
+
+    var out = doc.getZip().generate({
+      type: "blob",
+      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    }) //Output the document using Data-URI
+    saveAs(out, "Rapport.docx")
+  })
+}
+
+/*
+[{
+        "answer": "Afvigelse",
+        "auditorId": 9,
+        "comment": "",
+        "cvr": 12345678,
+        "questionId": 1,
+        "remark": "Remark",
+        "reportId": 1
+      }, {
+        "answer": "Observation",
+        "auditorId": 9,
+        "comment": "",
+        "cvr": 12345678,
+        "questionId": 5,
+        "remark": "Remark",
+        "reportId": 1
+      }, {
+        "answer": "Forbedring",
+        "auditorId": 9,
+        "comment": "",
+        "cvr": 12345678,
+        "questionId": 20,
+        "remark": "Remark",
+        "reportId": 1
+      }]
+*/
