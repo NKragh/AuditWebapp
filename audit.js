@@ -235,14 +235,12 @@ function Post() {
     })
 }
 
-
-
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
 }
 
 function generate() {
-  loadFile("input.docx", function (error, content) {
+  loadFile("input.docx", async function (error, content) {
     if (error) {
       throw error
     };
@@ -283,12 +281,22 @@ function generate() {
       errorHandler(error);
     }
 
+    const data = await GetReport()
+    const completed = new Date(data.completed).toDateString()
+    const afvigelser = await GetAfvigelser(data)
+    const observationer = await GetObservationer(data)
+    const forbedringer = await GetForbedringer(data)
+
     doc.setData({
-      first_name: 'John',
-      last_name: 'Doe',
-      phone: '0652455478',
-      description: 'New Website',
-      answers: Answers()
+      auditor: data.auditor.name,
+      completed: completed,
+      companyName: data.companyName,
+      cvr: data.cvr,
+      employees: data.employees,
+      answers: data.questionAnswers,
+      afvigelser: afvigelser,
+      observationer: observationer,
+      forbedringer: forbedringer
     });
     try {
       // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
@@ -333,3 +341,25 @@ function generate() {
         "reportId": 1
       }]
 */
+
+async function GetReport() {
+  const response = await fetch(reportsurl['prod'] + "/1")
+  const json = await response.json()
+  console.log(json)
+  return json
+}
+
+function GetAfvigelser(data) {
+  const result = data.questionAnswers.filter(answer => answer.answer == "Afvigelse")
+  return result
+}
+
+function GetObservationer(data) {
+  const result = data.questionAnswers.filter(answer => answer.answer == "Observation")
+  return result
+}
+
+function GetForbedringer(data) {
+  const result = data.questionAnswers.filter(answer => answer.answer == "Forbedring")
+  return result
+}
