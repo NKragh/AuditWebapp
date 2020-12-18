@@ -232,6 +232,9 @@ function Post() {
     })
     .then(response => {
       console.log(response)
+      const btncontainer = document.getElementById('buttoncontainer')
+      if (response.ok) btncontainer.innerHTML += "<p id='response'>Svar gemt succesfuldt.</p>"
+      else btncontainer.innerHTML += `<p id='response'>${response}</p>`
     })
 }
 
