@@ -1,31 +1,24 @@
-const checklisturl = {
-  prod: "https://auditrest.azurewebsites.net/api/checklists",
-  dev: "http://localhost:51284/api/checklists"
-}
-const reportsurl = {
-  prod: "https://auditrest.azurewebsites.net/api/reports",
-  dev: "http://localhost:51284/api/reports"
-}
-const answersurl = {
-  prod: "https://auditrest.azurewebsites.net/api/answers",
-  dev: "http://localhost:51284/api/answers"
+const baseurl = {
+  prod: "https://auditrest.azurewebsites.net/api/",
+  dev: "http://localhost:51284/api/"
 }
 
-document.onload = start()
+window.onload = startmus
 
 var container = document.getElementById('container')
 var checklistcontainer;
 var result;
 
 function start() {
+  environment = "prod"
   GetChecklists()
-  document.getElementById('savebtn').addEventListener('click', Post)
-
+  document.getElementById('savebtn').addEventListener('click', Save)
+  document.getElementById('completebtn').addEventListener('click', Complete)
 }
 
 function GetChecklists() {
   var html = ""
-  fetch(checklisturl['prod'])
+  fetch(baseurl[environment] + "checklists")
     .then(response => response.json())
     .then(data => {
       console.log(data)
@@ -189,10 +182,10 @@ function Answers() {
 }
 
 function GetAnswers() {
-  fetch(reportsurl['prod'])
+  fetch(baseurl[environment] + "answers")
     .then(response => response.json())
     .then(data => {
-      console.log(data[0].questionAnswers)
+      console.log(data)
     })
 }
 
@@ -220,9 +213,9 @@ function GetAnswers() {
       }`
 */
 
-function Post() {
+function Save() {
   console.log('POST:')
-  fetch(answersurl['prod'], {
+  fetch(baseurl[environment] + "answers", {
       method: 'POST',
       body: JSON.stringify(Answers()),
       headers: {
@@ -238,6 +231,24 @@ function Post() {
     })
 }
 
+function Complete() {
+  console.log('POST:')
+  fetch(baseurl[environment] + "reports/complete/1", {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => {
+      console.log(response)
+      const btncontainer = document.getElementById('buttoncontainer')
+      if (response.ok) btncontainer.innerHTML += "<p id='response'>Rapport afsluttet.</p>"
+      else btncontainer.innerHTML += `<p id='response'>${response}</p>`
+    })
+
+}
+
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
 }
@@ -248,7 +259,6 @@ function generate() {
       throw error
     };
 
-    // The error object contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
     function replaceErrors(key, value) {
       if (value instanceof Error) {
         return Object.getOwnPropertyNames(value).reduce(function (error, key) {
@@ -274,7 +284,6 @@ function generate() {
       }
       throw error;
     }
-
     var zip = new PizZip(content);
     var doc;
     try {
@@ -346,7 +355,7 @@ function generate() {
 */
 
 async function GetReport() {
-  const response = await fetch(reportsurl['prod'] + "/1")
+  const response = await fetch(baseurl[environment] + "reports/1")
   const json = await response.json()
   console.log(json)
   return json

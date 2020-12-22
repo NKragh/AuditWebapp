@@ -8,8 +8,5 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "docxtemplater": "^3.19.7",
-    "pizzip": "^3.0.6"
-  }
+  "dependencies": {}
 }
