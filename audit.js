@@ -10,7 +10,7 @@ var checklistcontainer;
 var result;
 
 function start() {
-  environment = "dev"
+  environment = "prod"
   GetChecklists()
   document.getElementById('savebtn').addEventListener('click', Save)
   document.getElementById('completebtn').addEventListener('click', Complete)
@@ -165,7 +165,7 @@ function Answers() {
     const q = allQuestions[i];
     ele = document.querySelector(`input[name="main${q.questionId}"]:checked`)
     comment = document.querySelector(`textarea#remark${q.questionId}`)
-    if (ele != null && ele.value != "OK") {
+    if (ele != null) {
       answer = {
         "answer": ele.value,
         "auditorId": 9,
@@ -173,7 +173,7 @@ function Answers() {
         "cvr": 12345678,
         "questionId": q.questionId,
         "remark": "Remark",
-        "reportId": 1
+        "reportId": 2
       }
       answers.push(answer)
     }
@@ -188,30 +188,6 @@ function GetAnswers() {
       console.log(data)
     })
 }
-
-/*
-  answer = {
-    "answer": "OK",
-    "auditorId": 9,
-    "comment": "Comment",
-    "cvr": 12345678,
-    "questionId": 20,
-    "remark": "Remark",
-    "reportId": 1
-  }
-*/
-
-/*
-`{
-        "answer": "OK",
-        "remark": "Remark",
-        "comment": "Comment",
-        "cvr": 12345678,
-        "questionId": 20,
-        "auditorId": 9,
-        "reportId": 1
-      }`
-*/
 
 function Save() {
   console.log('POST:')
@@ -247,4 +223,96 @@ function Complete() {
       else btncontainer.innerHTML += `<p id='response'>${response}</p>`
     })
 
+}
+
+function LastAudit() {
+  console.log("test")
+  const cvr = document.getElementById('CVR').innerHTML
+  fetch(baseurl[environment] + "reports/customer/" + cvr)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      const container = document.getElementById('lastaudits')
+      container.innerHTML = ""
+      const table = document.createElement('div')
+      table.classList.add('table')
+      var date = data[0].completed.split('T')[0]
+      table.appendChild(document.createTextNode(date))
+      const link = document.createElement('a')
+      link.href = "C:/Users/nikol/Documents"
+      link.innerHTML = "Kundemappe"
+      table.appendChild(link)
+      container.appendChild(table)
+      const headers = document.createElement('div')
+      headers.classList.add('row')
+
+      const header1 = document.createElement('div')
+      header1.innerHTML = "Resultat"
+      header1.classList.add('col-2')
+      const header2 = document.createElement('div')
+      header2.innerHTML = "Bemærkning"
+      header2.classList.add('col')
+      const header3 = document.createElement('div')
+      header3.innerHTML = "Kommentar"
+      header3.classList.add('col')
+      const header4 = document.createElement('div')
+      header4.innerHTML = "Reference"
+      header4.classList.add('col-2')
+      const header5 = document.createElement('div')
+      header5.classList.add('col-1')
+
+      headers.appendChild(header1)
+      headers.appendChild(header2)
+      headers.appendChild(header3)
+      headers.appendChild(header4)
+      headers.appendChild(header5)
+      table.appendChild(headers)
+
+      for (const j in data[0].questionAnswers) {
+        const answer = data[0].questionAnswers[j];
+        if (answer.answer !== "OK") {
+          const row = document.createElement('div')
+          row.classList.add('row')
+
+          const col1 = document.createElement('div')
+          col1.innerHTML = answer.answer
+          col1.classList.add('col-2')
+          const col2 = document.createElement('div')
+          col2.innerHTML = answer.remark
+          col2.classList.add('col')
+          const col3 = document.createElement('div')
+          col3.innerHTML = answer.comment
+          col3.classList.add('col')
+          const col4 = document.createElement('div')
+          col4.innerHTML = answer.questionId
+          col4.classList.add('col-2')
+          const col5 = document.createElement('div')
+          const transbtn = document.createElement('button')
+          transbtn.id = answer.id
+          transbtn.innerHTML = "Overfør"
+          transbtn.onclick = (e) => {
+            transfer(e)
+          }
+          col5.appendChild(transbtn)
+          col5.classList.add('col-1')
+
+          row.appendChild(col1)
+          row.appendChild(col2)
+          row.appendChild(col3)
+          row.appendChild(col4)
+          row.appendChild(col5)
+          table.appendChild(row)
+        }
+      }
+    })
+  var ele = document.getElementById('lastaudits')
+  ele.classList.add('active')
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key == "Escape") ele.classList.remove('active')
+  })
+}
+
+function transfer(e) {
+  console.log(e.target.id)
 }

@@ -65,7 +65,6 @@ function loadActionRows() {
   var rows = [];
   rows.push(['Resultat', 'Bemærkning', 'Kommentar', 'Reference']);
   for (const i in afvigelser) {
-    console.log(afvigelser[i])
     rows.push([afvigelser[i].answer, afvigelser[i].remark, afvigelser[i].comment, afvigelser[i].question])
   }
   for (const i in observationer) {

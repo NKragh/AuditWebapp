@@ -37,6 +37,19 @@
 
 <body>
   <div class="container">
+    <div class="row">
+      <div class="col">
+        <ul>
+          <li><a href="kunder.html">Kunder</a></li>
+          <li><a href="audit.html">Audit</a></li>
+          <li style="float: right;"><button onclick="LastAudit()">Sidste
+              audit</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container" id="lastaudits">
+      test
+    </div>
     <div class="row" id="stamdata">
       <div class="col-5 infobox">
         <div>Deltagere</div>
@@ -47,7 +60,7 @@
             <div></div>
           </div>
           <div class="col">
-            <div id="CVR" class="infobox infoitem">Jens Kjærullfff</div>
+            <div id="Auditor" class="infobox infoitem">Jens Kjærullfff</div>
             <div id="Deltager1" class="infobox infoitem">Jens Ole</div>
             <div id="Deltager2" class="infobox infoitem">Børge</div>
           </div>
@@ -81,6 +94,7 @@
       </div>
     </div>
   </div>
+
   <div id="container" class="container"></div>
   <script src="audit.js"></script>
   <script src="report.js"></script>

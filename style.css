@@ -2,10 +2,36 @@ hr {
   background-color: black;
 }
 
-.navitem {
-  display: inline;
-  padding: 0 5px;
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%
+}
+
+ul>li {
+  float: left;
+}
+
+ul>li:hover {
+  background-color: lightgray;
+}
+
+ul>li a {
+  color: black;
+  display: block;
+  padding: 15px 15px;
   border: 1px solid black;
+  justify-content: baseline;
+}
+
+ul>li button {
+  color: black;
+  display: block;
+  padding: 15px 15px;
+  border: 1px solid black;
+  justify-content: baseline;
 }
 
 .infobox {
@@ -47,4 +73,24 @@ hr {
 .remarkfield {
   border: 1px solid darkgreen;
   width: 100%;
+}
+
+#lastaudits {
+  display: none;
+}
+
+#lastaudits>div>div>div {
+  border: 1px solid black;
+}
+
+#lastaudits.active {
+  display: block;
+  opacity: 100;
+  background-color: white;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  border: 1px solid black;
+  box-shadow: 0px 0px 100px;
 }
