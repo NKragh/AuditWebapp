@@ -3,14 +3,14 @@ const baseurl = {
   dev: "http://localhost:51284/api/"
 }
 
-window.onload = startmus
+window.onload = start
 
 var container = document.getElementById('container')
 var checklistcontainer;
 var result;
 
 function start() {
-  environment = "prod"
+  environment = "dev"
   GetChecklists()
   document.getElementById('savebtn').addEventListener('click', Save)
   document.getElementById('completebtn').addEventListener('click', Complete)
@@ -21,7 +21,7 @@ function GetChecklists() {
   fetch(baseurl[environment] + "checklists")
     .then(response => response.json())
     .then(data => {
-      console.log(data)
+      // console.log(data)
       result = data;
       html += `<div class="row">
                <div class="col-10">
@@ -247,131 +247,4 @@ function Complete() {
       else btncontainer.innerHTML += `<p id='response'>${response}</p>`
     })
 
-}
-
-function loadFile(url, callback) {
-  PizZipUtils.getBinaryContent(url, callback);
-}
-
-function generate() {
-  loadFile("input.docx", async function (error, content) {
-    if (error) {
-      throw error
-    };
-
-    function replaceErrors(key, value) {
-      if (value instanceof Error) {
-        return Object.getOwnPropertyNames(value).reduce(function (error, key) {
-          error[key] = value[key];
-          return error;
-        }, {});
-      }
-      return value;
-    }
-
-    function errorHandler(error) {
-      console.log(JSON.stringify({
-        error: error
-      }, replaceErrors));
-
-      if (error.properties && error.properties.errors instanceof Array) {
-        const errorMessages = error.properties.errors.map(function (error) {
-          return error.properties.explanation;
-        }).join("\n");
-        console.log('errorMessages', errorMessages);
-        // errorMessages is a humanly readable message looking like this :
-        // 'The tag beginning with "foobar" is unopened'
-      }
-      throw error;
-    }
-    var zip = new PizZip(content);
-    var doc;
-    try {
-      doc = new window.docxtemplater(zip);
-    } catch (error) {
-      // Catch compilation errors (errors caused by the compilation of the template : misplaced tags)
-      errorHandler(error);
-    }
-
-    const data = await GetReport()
-    const completed = new Date(data.completed).toDateString()
-    const afvigelser = await GetAfvigelser(data)
-    const observationer = await GetObservationer(data)
-    const forbedringer = await GetForbedringer(data)
-
-    doc.setData({
-      auditor: data.auditor.name,
-      completed: completed,
-      companyName: data.companyName,
-      cvr: data.cvr,
-      employees: data.employees,
-      answers: data.questionAnswers,
-      afvigelser: afvigelser,
-      observationer: observationer,
-      forbedringer: forbedringer
-    });
-    try {
-      // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-      doc.render();
-    } catch (error) {
-      // Catch rendering errors (errors relating to the rendering of the template : angularParser throws an error)
-      errorHandler(error);
-    }
-
-    var out = doc.getZip().generate({
-      type: "blob",
-      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    }) //Output the document using Data-URI
-    saveAs(out, "Rapport.docx")
-  })
-}
-
-/*
-[{
-        "answer": "Afvigelse",
-        "auditorId": 9,
-        "comment": "",
-        "cvr": 12345678,
-        "questionId": 1,
-        "remark": "Remark",
-        "reportId": 1
-      }, {
-        "answer": "Observation",
-        "auditorId": 9,
-        "comment": "",
-        "cvr": 12345678,
-        "questionId": 5,
-        "remark": "Remark",
-        "reportId": 1
-      }, {
-        "answer": "Forbedring",
-        "auditorId": 9,
-        "comment": "",
-        "cvr": 12345678,
-        "questionId": 20,
-        "remark": "Remark",
-        "reportId": 1
-      }]
-*/
-
-async function GetReport() {
-  const response = await fetch(baseurl[environment] + "reports/1")
-  const json = await response.json()
-  console.log(json)
-  return json
-}
-
-function GetAfvigelser(data) {
-  const result = data.questionAnswers.filter(answer => answer.answer == "Afvigelse")
-  return result
-}
-
-function GetObservationer(data) {
-  const result = data.questionAnswers.filter(answer => answer.answer == "Observation")
-  return result
-}
-
-function GetForbedringer(data) {
-  const result = data.questionAnswers.filter(answer => answer.answer == "Forbedring")
-  return result
 }
