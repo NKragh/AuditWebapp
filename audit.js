@@ -238,8 +238,12 @@ function LastAudit() {
       table.classList.add('table')
       var date = data[0].completed.split('T')[0]
       table.appendChild(document.createTextNode(date))
-      const link = document.createElement('a')
-      link.href = "C:/Users/nikol/Documents"
+      const link = document.createElement('button')
+      // link.href = "C:/Users/nikol/Documents"
+      link.addEventListener('click', () => {
+        WshShell = new ActiveXObject("WScript.Shell");
+        WshShell.Run("explorer.exe")
+      })
       link.innerHTML = "Kundemappe"
       table.appendChild(link)
       container.appendChild(table)

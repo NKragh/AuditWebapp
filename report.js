@@ -1,6 +1,6 @@
 async function generate() {
   await LoadData()
-  // generateDOCX()
+  generateDOCX()
   generatePDF()
 }
 
@@ -23,14 +23,14 @@ async function LoadData() {
   forbedringer = await GetForbedringer(data)
 
   auditor = data.auditor.name
-  companyName = data.companyName
-  cvr = data.cvr
+  companyName = data.customer.name
+  cvr = data.customer.cvr
   employees = data.employees
   answers = data.questionAnswers
 }
 
 async function GetReport() {
-  const response = await fetch(baseurl[environment] + "reports/1")
+  const response = await fetch(baseurl[environment] + "reports/2")
   const json = await response.json()
   console.log(json)
   return json
@@ -65,13 +65,13 @@ function loadActionRows() {
   var rows = [];
   rows.push(['Resultat', 'Bemærkning', 'Kommentar', 'Reference']);
   for (const i in afvigelser) {
-    rows.push([afvigelser[i].answer, afvigelser[i].remark, afvigelser[i].comment, afvigelser[i].question])
+    rows.push([afvigelser[i].answer, afvigelser[i].remark, afvigelser[i].comment, afvigelser[i].questionId])
   }
   for (const i in observationer) {
-    rows.push([observationer[i].answer, observationer[i].remark, observationer[i].comment, observationer[i].question])
+    rows.push([observationer[i].answer, observationer[i].remark, observationer[i].comment, observationer[i].questionId])
   }
   for (const i in forbedringer) {
-    rows.push([forbedringer[i].answer, forbedringer[i].remark, forbedringer[i].comment, forbedringer[i].question])
+    rows.push([forbedringer[i].answer, forbedringer[i].remark, forbedringer[i].comment, forbedringer[i].questionId])
   }
   return rows
 }
@@ -80,7 +80,7 @@ function loadAllRows() {
   var rows = []
   rows.push(['Resultat', 'Bemærkning', 'Kommentar', 'Reference']);
   for (const i in answers) {
-    rows.push([answers[i].answer, answers[i].remark, answers[i].comment, answers[i].question])
+    rows.push([answers[i].answer, answers[i].remark, answers[i].comment, answers[i].questionId])
   }
   return rows
 }
