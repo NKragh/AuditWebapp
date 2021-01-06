@@ -212,7 +212,7 @@ function generateDOCX() {
     var out = doc.getZip().generate({
       type: "blob",
       mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    }) //Output the document using Data-URI
+    })
     saveAs(out, "Rapport.docx")
   })
 }
